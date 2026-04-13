@@ -12,23 +12,34 @@ body {
   background: linear-gradient(to bottom right, #ffd6e8, #fff);
   text-align:center;
   overflow-x:hidden;
+  min-height: 100vh;
 }
 
-/* BUTTON (MOBILE FRIENDLY) */
-button {
-  padding:15px;
-  width:70%;
-  max-width:250px;
-  border:none;
-  border-radius:25px;
-  background:#ff8fb1;
-  color:white;
-  font-size:18px;
-  margin-top:10px;
+/* MUSIC BUTTON - Small and out of the way */
+#musicBtn {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  padding: 8px 12px;
+  border-radius: 50%;
+  border: none;
+  background: #ff8fb1;
+  color: white;
+  z-index: 1000;
   cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
-/* INPUT */
+/* LOGIN SCREEN */
+#login {
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items: center;
+  padding: 20px;
+}
+
 input {
   padding:15px;
   width:70%;
@@ -37,45 +48,60 @@ input {
   border-radius:25px;
   font-size:18px;
   text-align:center;
+  margin-bottom: 10px;
 }
 
-/* MUSIC BUTTON */
-#musicBtn {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  padding: 10px 15px;
-  border-radius: 20px;
-  border: none;
-  background: #ff8fb1;
-  color: white;
-  z-index: 1000;
+button.enter-btn {
+  padding:15px;
+  width:70%;
+  max-width:250px;
+  border:none;
+  border-radius:25px;
+  background:#ff8fb1;
+  color:white;
+  font-size:18px;
+  cursor: pointer;
 }
+
+/* HOME SECTION FIXES */
+#home {
+  display:none;
+  padding-top: 80px; /* Space for the music button */
+  padding-bottom: 50px;
+}
+
+.text-container {
+  padding: 0 20px;
+  margin-bottom: 20px;
+}
+
+h1 { font-size: 1.8rem; margin-bottom: 10px; }
+h3 { font-size: 1.1rem; font-weight: normal; color: #555; }
 
 /* BACKGROUND ANIMATIONS */
 .heart, .petalFall {
   position: fixed;
   pointer-events: none;
+  z-index: 1; /* Keep them behind text if needed */
 }
 .heart { bottom:-10px; animation: floatUp 6s linear infinite; }
 .petalFall { top:-10px; animation: fall 6s linear infinite; }
 
-@keyframes floatUp { to { transform: translateY(-100vh); opacity:0; } }
-@keyframes fall { to { transform: translateY(100vh); } }
+@keyframes floatUp { to { transform: translateY(-110vh); opacity:0; } }
+@keyframes fall { to { transform: translateY(110vh); } }
 
 /* BOUQUET */
 .bouquet {
-  width: 220px;
-  max-width: 70%;
-  margin-top: 40px;
+  width: 200px;
+  max-width: 60%;
+  margin: 20px auto;
   cursor: pointer;
+  display: block;
   animation: float 2.5s ease-in-out infinite;
-  transition: transform 0.3s, filter 0.3s;
+  transition: transform 0.3s;
 }
 
-.glow-effect {
-  filter: drop-shadow(0 0 20px rgba(255, 143, 177, 0.9)) scale(1.1);
-}
+.glow-effect { filter: drop-shadow(0 0 20px rgba(255, 143, 177, 0.9)) scale(1.1); }
 
 @keyframes float {
   0%,100% { transform: translateY(0); }
@@ -100,12 +126,11 @@ input {
   display:flex;
   flex-wrap:wrap;
   justify-content:center;
-  gap:15px;
-  margin-top:20px;
-  padding-bottom: 50px;
+  gap:10px;
+  margin-top:30px;
 }
 
-.flip-card { width:140px; height:180px; perspective:1000px; }
+.flip-card { width:100px; height:140px; perspective:1000px; }
 .flip-inner {
   width:100%; height:100%;
   position:relative;
@@ -118,8 +143,8 @@ input {
   backface-visibility:hidden; border-radius:10px;
 }
 .flip-front { background:white; display:flex; align-items:center; justify-content:center; font-size:20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-.flip-back { transform: rotateY(180deg); }
 .flip-back img { width:100%; height:100%; object-fit:cover; border-radius:10px; }
+.flip-back { transform: rotateY(180deg); }
 
 /* LETTER MODAL */
 #letterModal {
@@ -127,32 +152,35 @@ input {
   position:fixed;
   top:0; left:0;
   width:100%; height:100%;
-  background:rgba(0,0,0,0.6);
+  background:rgba(0,0,0,0.8);
   z-index: 2000;
   overflow-y: auto;
 }
 #letterContent {
   background:#fff0f5;
-  margin:5% auto;
-  padding:30px;
-  width:85%;
-  max-width: 500px;
+  margin: 40px auto;
+  padding: 30px 20px;
+  width: 85%;
+  max-width: 450px;
   border-radius:15px;
-  position: relative;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  text-align: left; /* Align text left for better readability */
+  text-align: left;
   line-height: 1.6;
+  font-size: 15px;
 }
 
-/* Paragraph spacing */
-#typewriter-text p {
-  margin-bottom: 20px;
+#typewriter-text p { margin-bottom: 18px; }
+#closeBtn {
+  display: none;
+  margin: 20px auto 0;
+  padding: 10px 20px;
+  background: #ff8fb1;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
 }
-
-#home { display:none; }
 </style>
 </head>
-
 <body>
 
 <audio id="bgMusic" loop>
@@ -161,19 +189,21 @@ input {
 
 <button id="musicBtn" onclick="toggleMusic()">🎵</button>
 
-<div id="login" style="height:100vh; display:flex; flex-direction:column; justify-content:center; align-items: center;">
-  <h2>HOW LONG HAVE WE BEEN TOGETHER? 💕</h2>
-  <input id="code" type="number" placeholder="Hint: 💖">
-  <button onclick="checkCode()">Enter</button>
+<div id="login">
+  <h2>HOW MANY MONTHS HAVE WE BEEN TOGETHER (OFFICIALLY)? 💕</h2>
+  <input id="code" type="number" placeholder="Hint: Me + You = ?">
+  <button class="enter-btn" onclick="checkCode()">Enter</button>
   <p id="error" style="color:red;"></p>
 </div>
 
 <div id="home">
-  <h1>Happy Monthsary, Lablab! 💖</h1>
-  <h3>since i can't afford any flowers right now, here it goes..</h3>
+  <div class="text-container">
+    <h1>Happy Monthsary, Lablab! 💖</h1>
+    <h3>Since I can't rea;;y afford any flowers right now, I made you one nalang hehe >.< </h3>
+  </div>
 
   <img src="bouquet.png" id="mainBouquet" class="bouquet" onclick="bouquetTap(this)">
-  <p>Tap the bouquet 💕</p>
+  <p style="margin-top: 10px;">Tap the bouquet 💕</p>
 
   <div class="gallery">
     <div class="flip-card" onclick="flip(this)"><div class="flip-inner"><div class="flip-front">💖</div><div class="flip-back"><img src="photo1.jpg"></div></div></div>
@@ -186,7 +216,7 @@ input {
 <div id="letterModal">
   <div id="letterContent">
     <div id="typewriter-text"></div>
-    <button id="closeBtn" onclick="closeLetter()" style="display:none; width: 100px; font-size: 14px; padding: 10px; margin: 20px auto 0; display: block;">Close</button>
+    <button id="closeBtn" onclick="closeLetter()">Close</button>
   </div>
 </div>
 
@@ -194,37 +224,28 @@ input {
 const paragraphs = [
   "To my dearest, Sel,",
   "Happy monthsary! It’s crazy how time is flying by, but honestly, every day with you just feels right. I was sitting here thinking about everything we’ve been through lately, and I realized how much you’ve actually changed my world. You aren't just my partner; you’re my person—the one who makes the boring stuff fun and the hard days actually okay.",
-  "I hope you know how much I genuinely appreciate you. It’s the little things, really—the way you laugh, how you actually listen when I’m rambling, and just that feeling of peace I get when we’re together. You have this way of making everything feel a bit lighter just by being there. You’re kind, you’re strong, and you’re honestly one of a kind.",
-  "I’ve been looking back at our memories, and even the small ones mean a lot to me. Whether we’re talking for hours or just sitting in silence, I wouldn't trade those moments for anything. I love that I can just be myself with you. There’s no pressure to be perfect, and that’s something I’ve never really had before.",
-  "Thank you for being so patient with me and for always having my back. You believe in me even when I’m doubting myself, and that honestly keeps me going more than you know. You make me want to be better—not because I have to, but because I want to be someone who deserves a love as good as yours.",
-  "Life gets pretty chaotic sometimes, but you’re my constant through all of it. You’re the first person I want to tell when something good happens, and the person I turn to when things go wrong. Knowing we’re a team makes me feel like we can handle whatever comes our way. I really trust what we have.",
-  "I still think about how lucky I am that we found each other. It’s wild how things just fell into place, but I’m so glad they did. I promise to keep choosing you and to never take us for granted. You deserve to feel special every single day, not just on days like today, and I’m going to keep doing my best to make sure you do.",
-  "I’m so excited for what’s next for us. I can’t wait for more adventures, more growth, and more of just… us. Thank you for sharing your life with me and for being so open with your heart. You really are the best thing that’s happened to me, and I’m so grateful to call you mine.",
-  "So, here’s to us and to a lot more months of laughing until our stomachs hurt and supporting each other through everything. You have my heart completely, today and every day after. I love you more than I can put into a message, and I’m just really proud to be yours.",
+  "I hope you know how much I genuinely appreciate you. It’s the little things, really—the way you laugh, how you actually listen when I’m rambling, and just that feeling of peace I get when we’re together. You have this way of making everything feel a bit lighter just by being there.",
+  "I’ve been looking back at our memories, and even the small ones mean a lot to me. Whether we’re talking for hours or just sitting in silence, I wouldn't trade those moments for anything. I love that I can just be myself with you. There’s no pressure to be perfect.",
+  "Thank you for being so patient with me and for always having my back. You believe in me even when I’m doubting myself, and that honestly keeps me going more than you know. You make me want to be better—because I want to be someone who deserves a love as good as yours.",
+  "Life gets pretty chaotic sometimes, but you’re my constant through all of it. You’re the first person I want to tell when something good happens. Knowing we’re a team makes me feel like we can handle whatever comes our way. I really trust what we have.",
+  "I still think about how lucky I am that we found each other. I promise to keep choosing you and to never take us for granted. You deserve to feel special every single day, not just on days like today, and I’m going to keep doing my best to make sure you do.",
+  "I’m so excited for what’s next for us. I can’t wait for more adventures, more growth, and more of just… us. Thank you for sharing your life with me. You really are the best thing that’s happened to me.",
+  "So, here’s to us and to a lot more months of laughing until our stomachs hurt and supporting each other through everything. You have my heart completely, today and every day after.",
   "For the one I cherish, with all the love I hold, Cliff"
 ];
 
 let isTyping = false;
 
-function typeWriter(paragraphIndex, charIndex) {
-  const container = document.getElementById("typewriter-text");
-  
-  if (paragraphIndex < paragraphs.length) {
-    // Create new paragraph if starting fresh
-    if (charIndex === 0) {
-      const p = document.createElement("p");
-      container.appendChild(p);
-    }
-    
-    const currentParaElement = container.lastElementChild;
-    const currentText = paragraphs[paragraphIndex];
-    
-    if (charIndex < currentText.length) {
-      currentParaElement.innerHTML += currentText.charAt(charIndex);
-      setTimeout(() => typeWriter(paragraphIndex, charIndex + 1), 30); // Speed control
+function typeWriter(pIdx, cIdx) {
+  const box = document.getElementById("typewriter-text");
+  if (pIdx < paragraphs.length) {
+    if (cIdx === 0) box.appendChild(document.createElement("p"));
+    const pTag = box.lastElementChild;
+    pTag.innerHTML += paragraphs[pIdx].charAt(cIdx);
+    if (cIdx < paragraphs[pIdx].length - 1) {
+      setTimeout(() => typeWriter(pIdx, cIdx + 1), 35);
     } else {
-      // Move to next paragraph
-      setTimeout(() => typeWriter(paragraphIndex + 1, 0), 400);
+      setTimeout(() => typeWriter(pIdx + 1, 0), 500);
     }
   } else {
     document.getElementById("closeBtn").style.display = "block";
@@ -234,25 +255,19 @@ function typeWriter(paragraphIndex, charIndex) {
 
 function bouquetTap(el) {
   if(isTyping) return;
-  
   el.classList.add("glow-effect");
   const rect = el.getBoundingClientRect();
   const x = rect.left + rect.width / 2;
   const y = rect.top + rect.height / 2;
   
-  const items = ["🌸", "✨", "💖", "🌷", "🌸"];
   for (let i = 0; i < 12; i++) {
     let p = document.createElement("div");
     p.className = "burst-petal";
-    p.innerHTML = items[Math.floor(Math.random() * items.length)];
-    const moveX = (Math.random() - 0.5) * 400 + "px";
-    const moveY = (Math.random() - 0.5) * 400 + "px";
-    const rotate = Math.random() * 360 + "deg";
-    p.style.setProperty('--x', moveX);
-    p.style.setProperty('--y', moveY);
-    p.style.setProperty('--r', rotate);
-    p.style.left = x + "px";
-    p.style.top = y + "px";
+    p.innerHTML = ["🌸", "✨", "💖", "🌷"][Math.floor(Math.random() * 4)];
+    p.style.setProperty('--x', (Math.random() - 0.5) * 300 + "px");
+    p.style.setProperty('--y', (Math.random() - 0.5) * 300 + "px");
+    p.style.setProperty('--r', Math.random() * 360 + "deg");
+    p.style.left = x + "px"; p.style.top = y + "px";
     document.body.appendChild(p);
     setTimeout(() => p.remove(), 1000);
   }
@@ -260,56 +275,40 @@ function bouquetTap(el) {
   setTimeout(() => {
     el.classList.remove("glow-effect");
     document.getElementById("letterModal").style.display="block";
-    document.getElementById("typewriter-text").innerHTML = ""; // Clear old text
-    document.getElementById("closeBtn").style.display = "none";
+    document.getElementById("typewriter-text").innerHTML = "";
     isTyping = true;
     typeWriter(0, 0);
   }, 400);
 }
 
-// Background Animations
-setInterval(()=>{
-  let h=document.createElement("div");
-  h.className="heart";
-  h.style.left=Math.random()*100+"vw";
-  h.innerHTML="💖";
-  document.body.appendChild(h);
-  setTimeout(()=>h.remove(),6000);
-},400);
-
-setInterval(()=>{
-  let p=document.createElement("div");
-  p.className="petalFall";
-  p.style.left=Math.random()*100+"vw";
-  p.innerHTML="🌸";
-  document.body.appendChild(p);
-  setTimeout(()=>p.remove(),6000);
-},700);
-
 function checkCode(){
-  let code=document.getElementById("code").value;
-  if(code==="2"){
+  if(document.getElementById("code").value === "2"){
     document.getElementById("login").style.display="none";
     document.getElementById("home").style.display="block";
     document.getElementById("bgMusic").play();
   } else {
-    document.getElementById("error").innerText="Try again love 💕";
+    document.getElementById("error").innerText="Are you really my Seliee?";
   }
 }
 
-function closeLetter(){
-  if(isTyping) return; // Prevent closing while typing
-  document.getElementById("letterModal").style.display="none";
-}
-
-function flip(card){
-  card.classList.toggle("clicked");
-}
-
+function closeLetter(){ document.getElementById("letterModal").style.display="none"; }
+function flip(card){ card.classList.toggle("clicked"); }
 function toggleMusic(){
   let m=document.getElementById("bgMusic");
-  if(m.paused){m.play();} else {m.pause();}
+  m.paused ? m.play() : m.pause();
 }
+
+// Background Loops
+setInterval(()=>{
+  let h=document.createElement("div"); h.className="heart";
+  h.style.left=Math.random()*100+"vw"; h.innerHTML="💖";
+  document.body.appendChild(h); setTimeout(()=>h.remove(),6000);
+},500);
+setInterval(()=>{
+  let p=document.createElement("div"); p.className="petalFall";
+  p.style.left=Math.random()*100+"vw"; p.innerHTML="🌸";
+  document.body.appendChild(p); setTimeout(()=>p.remove(),6000);
+},800);
 </script>
 
 </body>
